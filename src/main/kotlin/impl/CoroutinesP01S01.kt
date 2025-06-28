@@ -1,5 +1,7 @@
 package impl
 
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import service.ServiceP01S01
 
 /**
@@ -12,7 +14,11 @@ import service.ServiceP01S01
 class CoroutinesP01S01(
     private val repository: ServiceP01S01.Repository
 ) {
-    fun saveToRepository(rows: List<String>) {
-        TODO("Not yet implemented")
+    fun saveToRepository(rows: List<String>) = runBlocking {
+        rows.forEach {
+            launch {
+                repository.save(it)
+            }
+        }
     }
 }

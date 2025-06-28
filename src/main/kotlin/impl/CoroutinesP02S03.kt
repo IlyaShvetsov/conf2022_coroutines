@@ -1,7 +1,6 @@
 package impl
 
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 /**
  * Часть 2. Задание 3. Синхронизация доступа.
@@ -10,16 +9,19 @@ import kotlinx.coroutines.launch
  * а выполнять более сложные преобразования общего ресурса - например, собирать строку?
  */
 object CoroutinesP02S03 {
-    suspend fun executeAndConcatenate(times: Int, body: suspend (i: Int) -> String): String {
-        var accumulator = ""
+    suspend fun executeAndConcatenate(times: Int, body: suspend (i: Int) -> String): String =
         coroutineScope {
-            repeat(times) { i ->
-                launch {
-                    val value = body(i)
-                        accumulator += value
-                }
-            }
+            (0 until times)
+                .map { index -> async { body(index) } }
+                .awaitAll()
+                .sum()
         }
-        return accumulator
+}
+
+private fun Iterable<String>.sum(): String {
+    val sum = StringBuilder()
+    for (element in this) {
+        sum.append(element)
     }
+    return sum.toString()
 }

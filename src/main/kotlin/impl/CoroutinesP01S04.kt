@@ -1,6 +1,7 @@
 package impl
 
 import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Часть 1. Задание 4. Смена контекста.
@@ -21,7 +22,21 @@ object CoroutinesP01S04 {
         prepare: suspend () -> Unit,
         getQuery: suspend () -> String,
         execute: suspend (query: String) -> Unit
-    ) {
-        TODO("Not yet implemented")
+    ) = runBlocking {
+        newSingleThreadContext(thread1Name).use { context1 ->
+            launch {
+                withContext(context1) {
+                    prepare()
+                }
+            }
+            newSingleThreadContext(thread2Name).use { context2 ->
+                val query = withContext(context2) {
+                    getQuery()
+                }
+                withContext(context1) {
+                    execute(query)
+                }
+            }
+        }
     }
 }

@@ -17,10 +17,12 @@ object CoroutinesP02S01 {
         body: suspend (i: Int) -> Int
     ) {
         coroutineScope {
+            val list = arrayListOf<Deferred<Int>>()
             repeat(times) { i ->
-                launch {
-                    counter.add(body(i))
-                }
+                list.add( async { body(i) } )
+            }
+            list.awaitAll().forEach { i ->
+                counter.add(i)
             }
         }
     }

@@ -15,6 +15,10 @@ object CoroutinesP01S05 {
         parallelism: Int,
         body: suspend () -> Unit
     ) {
-        TODO("Not yet implemented")
+        newFixedThreadPoolContext(parallelism, "").use {
+            withContext(Dispatchers.Default) {
+                body()
+            }
+        }
     }
 }

@@ -18,6 +18,12 @@ object CoroutinesP04S02 {
         writer: ServiceP04S02.Writer,
         limit: Int
     ) {
-        TODO("Not yet implemented")
+        flow.transform { line -> line.split(',', ';').forEach { phone -> emit(phone)} }
+            .map { phone -> phone.filter { c -> c.isDigit() }.takeLast(10) }
+            .filter { phone -> phone.isNotBlank() && phone[0] == '9' }
+            .take(limit)
+            .collect { phone ->
+                writer.write(phone)
+            }
     }
 }

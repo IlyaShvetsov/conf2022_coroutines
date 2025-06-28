@@ -2,6 +2,7 @@ package impl
 
 import kotlinx.coroutines.*
 import service.ServiceP01S06
+import kotlin.coroutines.startCoroutine
 
 /**
  * Часть 1. Задание 6. Диспетчеры корутин.
@@ -13,7 +14,7 @@ object CoroutinesP01S06 {
     suspend fun execute(
         log: ServiceP01S06.Log,
         body: suspend () -> Unit
-    ) {
+    ) = withContext(Dispatchers.Unconfined) {
         log.logBefore()
         body()
         log.logAfter()

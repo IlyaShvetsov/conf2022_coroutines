@@ -1,6 +1,7 @@
 package impl
 
 import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.toList
 
 /**
  * Часть 3. Задание 1. Получение элементов из канала.
@@ -12,7 +13,6 @@ object CoroutinesP03S01 {
     suspend fun channelToList(
         channel: ReceiveChannel<Int>,
         body: suspend (Int) -> String
-    ): List<String> {
-        TODO("Not yet implemented")
-    }
+    ): List<String> =
+        channel.toList().map { body(it) }
 }

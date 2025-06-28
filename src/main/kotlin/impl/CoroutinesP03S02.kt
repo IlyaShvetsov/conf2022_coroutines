@@ -2,6 +2,7 @@ package impl
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.produce
 
 /**
  * Часть 3. Задание 2. Отправка элементов в канал.
@@ -13,7 +14,9 @@ object CoroutinesP03S02 {
     fun CoroutineScope.listToChannel(
         list: List<Int>,
         body: suspend (Int) -> String
-    ): ReceiveChannel<String> {
-        TODO("Not yet implemented")
+    ): ReceiveChannel<String> = produce {
+        list.forEach { item ->
+            send(body(item))
+        }
     }
 }
