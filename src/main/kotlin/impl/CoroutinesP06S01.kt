@@ -15,6 +15,14 @@ object CoroutinesP06S01 {
         onException: (message: String) -> Unit = {},
         body: suspend () -> Unit
     ): Job {
-        TODO("Not yet implemented")
+        return launch {
+            try {
+                body()
+            } catch (e: CancellationException) {
+                onCancel(e.message.orEmpty())
+            } catch (e: Exception) {
+                onException(e.message.orEmpty())
+            }
+        }
     }
 }

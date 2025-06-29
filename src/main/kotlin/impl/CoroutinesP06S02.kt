@@ -16,6 +16,15 @@ object CoroutinesP06S02 {
         onException: (message: String, suppressed: List<String>) -> Unit,
         body: suspend CoroutineScope.() -> Job
     ) {
-        TODO("Not yet implemented")
+        val handler = CoroutineExceptionHandler { _, exception ->
+            onException(
+                exception.message.orEmpty(),
+                exception.suppressed.map { e -> e.message.orEmpty() }
+            )
+        }
+
+        CoroutineScope(handler)
+            .launch { body() }
+            .join()
     }
 }

@@ -15,10 +15,8 @@ object CoroutinesP01S05 {
         parallelism: Int,
         body: suspend () -> Unit
     ) {
-        newFixedThreadPoolContext(parallelism, "").use {
-            withContext(Dispatchers.Default) {
-                body()
-            }
+        withContext(Dispatchers.Default) {
+            body()
         }
     }
 }

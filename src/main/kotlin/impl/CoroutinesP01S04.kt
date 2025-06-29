@@ -23,13 +23,37 @@ object CoroutinesP01S04 {
         getQuery: suspend () -> String,
         execute: suspend (query: String) -> Unit
     ) = runBlocking {
-        newSingleThreadContext(thread1Name).use { context1 ->
+
+//        val context1 = newSingleThreadContext(thread1Name)
+//        val context2 = newSingleThreadContext(thread2Name)
+//
+//        val job1 = launch {
+//            withContext(context1) {
+//                prepare()
+//            }
+//        }
+//        val job2 = launch {
+//            val query = withContext(context2) {
+//                getQuery()
+//            }
+//            withContext(context1) {
+//                execute(query)
+//            }
+//        }
+//
+//        job1.join()
+//        job2.join()
+//
+//        context1.close()
+//        context2.close()
+
+        newSingleThreadContext(thread1Name).use { context1 -> // сам закроется !!!
             launch {
                 withContext(context1) {
                     prepare()
                 }
             }
-            newSingleThreadContext(thread2Name).use { context2 ->
+            newSingleThreadContext(thread2Name).use { context2 -> // сам закроется !!!
                 val query = withContext(context2) {
                     getQuery()
                 }

@@ -25,6 +25,8 @@ class CoroutinesP01S02(
 //    }
 
     fun readFromRepository(): List<String> = runBlocking {
-        return@runBlocking (0 until repository.rowCount).map { async { repository.read(it) } }.awaitAll()
+        return@runBlocking (0 until repository.rowCount)
+            .map { async { repository.read(it) } }
+            .awaitAll()
     }
 }
